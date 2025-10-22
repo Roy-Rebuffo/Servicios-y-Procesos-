@@ -4,5 +4,5 @@
 /**
  * 
  */
-module SincronizarDosHilos2 {
+module SincronizacionHilos {
 }
