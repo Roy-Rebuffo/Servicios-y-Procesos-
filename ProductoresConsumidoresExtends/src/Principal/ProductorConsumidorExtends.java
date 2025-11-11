@@ -10,7 +10,5 @@ public class ProductorConsumidorExtends {
 		Panaderia p = new Panaderia();
 		new Panadero(p).start();
 		new Consumidor(p).start();
-
 	}
-
 }
