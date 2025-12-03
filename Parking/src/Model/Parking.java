@@ -21,7 +21,7 @@ public class Parking {
 	public synchronized void salir() {
 		ocupadas--;//aumentan los espacios cuando un coche sale
 		System.out.println("\n" + Thread.currentThread().getName() + " Sale del parking.\n"
-				+ "Plazas Libres-> " + ocupadas);
+				+ "Plazas Libres-> " + (espacios - ocupadas));
 		notifyAll(); //notifica a los otros para que entren
 	}
 }

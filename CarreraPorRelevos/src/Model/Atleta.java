@@ -47,4 +47,3 @@ public class Atleta extends Thread {
         // Nota: Si solo quieres el tiempo total de la carrera, usa System.currentTimeMillis() antes de Main.
     }
 }
-// La clase Testigo y Main ya están correctas.
