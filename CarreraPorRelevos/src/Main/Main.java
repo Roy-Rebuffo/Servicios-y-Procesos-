@@ -14,7 +14,8 @@ public class Main {
 		Atleta[] atl = new Atleta[N_ATL];
 		
 		for (int i = 0; i < N_ATL; i++) {
-			atl[i] = new Atleta(testigo);
+			// **CORRECCIÓN:** Pasamos el índice (0, 1, 2, 3) como identidad
+			atl[i] = new Atleta(testigo, i); 
 			atl[i].start();
 		}
 	}

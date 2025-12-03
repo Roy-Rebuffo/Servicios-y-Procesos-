@@ -32,8 +32,8 @@ public class Carrera {
 	    }
 	
 	public synchronized void registrarLlegada(int dorsal, long tiempoLlegada) {
-		long total = tiempoLlegada - tiempoSalida;
+		long total = (tiempoLlegada - tiempoSalida)/1000;
 		resultados.add(total);
-		System.out.println("El atleta con el dorsal " + dorsal + " tarda " + total);
+		System.out.println("El atleta con el dorsal " + dorsal + " tarda " + total + " segundos");
 	}
 }
