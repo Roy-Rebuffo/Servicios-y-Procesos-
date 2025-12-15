@@ -1,60 +1,59 @@
 package Clases;
 
-import java.util.Iterator;
-import java.util.Random;
+import java.util.List;
 
 public class Cajera extends Thread{
-	private boolean libre = false;
-	private int ocupadas = 0;
-	private int cajeras = 3; //cantidad de cajeras
-	private Random random;
-	private int clientesTotales;
-	int clientesRestantes;
-	private Clientes cliente;
-
-	public Cajera(int clientesTotales) {
+	private String nombre;
+	private List<Cliente> cola;
+	private long inicioSimulacionMs;
+	
+	public Cajera(String nombre, List<Cliente> cola, long inicioSimulacionMs) {
 		super();
-		this.random = new Random();
-		this.clientesTotales = clientesTotales;
-		this.clientesRestantes = clientesTotales;
+		this.nombre = nombre;
+		this.cola = cola;
+		this.inicioSimulacionMs = inicioSimulacionMs;
+	}
+	
+	public void procesarCliente(Cliente cliente) {
+		long inicioCliente = tiempoDesdeInicio();
+		System.out.printf("[%6d ms] %s: atienda a: %s%n", inicioCliente, nombre, cliente.getNombre());
+		int i = 1;
+		for (int tiempo : cliente.getTiemposProductoMs()) {
+			try {
+				Thread.sleep(tiempo);
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+				return;
+			}
+			System.out.printf("[%6d ms] %s: producto %d de %s cobrado (%d ms)%n", tiempoDesdeInicio(), nombre, i++,
+					cliente.getNombre(),tiempo);
+		}
+		long finCliente = tiempoDesdeInicio();
+		System.out.printf("[%6d ms] %s: terminó con %s (duración: %d ms)%n", tiempoDesdeInicio(), nombre, cliente.getNombre(),
+				(finCliente - inicioCliente));
+	}
+	
+	public long tiempoDesdeInicio() {
+		return System.currentTimeMillis() - inicioSimulacionMs;
 	}
 
-	public void tiempoEnProcesarProductos() throws InterruptedException {
-		int tiempo = 2000 + random.nextInt(1000);//Entre 2 y 3 segundos
-		Thread.sleep(tiempo);
-	}
-	
-	public synchronized void intentarCobrar() throws InterruptedException {
-		while(ocupadas == cajeras) {//No hay cajeras disponibles
-			wait();
-		}
-		ocupadas ++;
-		System.out.println("\n" + Thread.currentThread().getName() + " Entra en la caja.\n"
-				+ "Cajas Ocupadas->" + ocupadas);
-	}
-	public synchronized void terminarCobrar(String name) {
-		ocupadas--;//aumentan los espacios cuando una cajera se queda libre
-		System.out.println("\n" + Thread.currentThread().getName() + " Sale de la caja.\n"
-				+ "Cajas Libres-> " + (cajeras - ocupadas));
-		notifyAll(); //notifica a los otros para que entren
-	}
-	
 	@Override
 	public void run() {
+		// TODO Auto-generated method stub
+		super.run();
+		Cliente cliente = null;
+		System.out.printf("[%6d ms] %s: inicio de turno \n", tiempoDesdeInicio(),nombre);
 		try {
-			while(clientesRestantes > 0) {//Mientras haya clientes
-				System.out.println("Comienza a cobrar");
-				libre = true;//puede cobrar
-				tiempoEnProcesarProductos();
-				notifyAll();
-				synchronized (this) {
-					System.out.println("Esta cobrando...");
-					libre = false;
-                } 
+			while(true) {
+				synchronized (cola) {
+					if(cola.size() == 0) break;
+					cliente = cola.remove(0);
+				}
+				procesarCliente(cliente);
 			}
-			System.out.println("Fin de la compra...");
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
 	}
+	
 }
