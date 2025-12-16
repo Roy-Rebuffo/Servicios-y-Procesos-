@@ -4,5 +4,5 @@
 /**
  * 
  */
-module SincronizacionHilos {
+module PrevioMasterMind {
 }
