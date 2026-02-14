@@ -18,7 +18,7 @@ public class Cliente {
 			System.out.print("Dime el capital: ");
 			double dinero = Double.valueOf(sc.nextLine());
 			
-			System.out.println("E/D(1), E/L(2), E/Y(3)");
+			System.out.print("E/D(1), E/L(2), E/Y(3)");
 			int codigo = sc.nextInt();
 			
 			//Pasamos datos al conversor (servidor)
